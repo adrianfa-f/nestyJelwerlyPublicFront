@@ -1,4 +1,3 @@
-// pages/ProductDetail.js
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '../services/productService';
@@ -11,6 +10,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [hoverImage, setHoverImage] = useState(null);
   
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', id],
@@ -42,6 +42,9 @@ const ProductDetail = () => {
     </div>
   );
 
+  // Crear array de imágenes no nulas
+  const images = [product.image1, product.image2, product.image3, product.image4].filter(img => img !== null && img !== '');
+
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Breadcrumb */}
@@ -62,21 +65,23 @@ const ProductDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div>
           <div className="mb-4 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center h-96">
-            {product.images && product.images.length > 0 && (
+            {images.length > 0 && (
               <img 
-                src={product.images[selectedImage]} 
+                src={hoverImage !== null ? images[hoverImage] : images[selectedImage]} 
                 alt={product.name} 
                 className="w-full h-full object-contain"
               />
             )}
           </div>
           
-          {product.images && product.images.length > 1 && (
+          {images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto py-2">
-              {product.images.map((img, index) => (
+              {images.map((img, index) => (
                 <button 
                   key={index}
                   onClick={() => setSelectedImage(index)}
+                  onMouseEnter={() => setHoverImage(index)}
+                  onMouseLeave={() => setHoverImage(null)}
                   className={`flex-shrink-0 border-2 rounded-lg overflow-hidden ${
                     index === selectedImage ? 'border-emerald-600' : 'border-gray-200'
                   }`}
