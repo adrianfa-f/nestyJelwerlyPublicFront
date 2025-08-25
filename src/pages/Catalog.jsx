@@ -82,13 +82,16 @@ const Catalog = () => {
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded"
-          >
-            {showFilters ? <FaTimes /> : <FaFilter />}
-            Filtros {hasActiveFilters && '•'}
-          </button>
+          {/* Botón de Filtros solo visible en móviles */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded"
+            >
+              {showFilters ? <FaTimes /> : <FaFilter />}
+              Filtros {hasActiveFilters && '•'}
+            </button>
+          </div>
           <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
         </div>
       </div>
