@@ -2,6 +2,20 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getFeaturedProducts } from '../services/productService';
 import { FaGem, FaHandSparkles, FaShippingFast, FaAward, FaMapMarkerAlt, FaPinterest, FaTwitter, FaInstagram, FaFacebook } from 'react-icons/fa';
+import AC1 from '../assets/AC1.jfif';
+import AC2 from '../assets/AC2.jfif';
+import AM1 from '../assets/AM1.jfif';
+import AM2 from '../assets/AM2.jfif';
+import CC1 from '../assets/CC1.jfif';
+import CC2 from '../assets/CC2.jfif';
+import PB1 from '../assets/PB1.jfif';
+import PB2 from '../assets/PB2.jfif';
+import AP1 from '../assets/AP1.jfif';
+import AP2 from '../assets/AP2.jfif';
+import DC1 from '../assets/DC1.jfif';
+import DC2 from '../assets/DC2.jfif';
+import BA1 from '../assets/BA1.jfif';
+import BA2 from '../assets/BA2.jfif';
 
 const Home = () => {
   const { 
@@ -21,44 +35,44 @@ const Home = () => {
   const detailedCategories = [
     {
       name: "Anillos compromiso",
-      productImage: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      modelImage: "https://images.unsplash.com/photo-1515562141207-7a88fb7ad5e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=772&q=80",
+      productImage: AC1,
+      modelImage: AC2,
       link: "/category/Anillos compromiso"
     },
     {
       name: "Anillos matrimonio",
-      productImage: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      modelImage: "https://images.unsplash.com/photo-1545996124-0501ebae84d0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
+      productImage: AM1,
+      modelImage: AM2,
       link: "/category/Anillos matrimonio"
     },
     {
       name: "Collares y cadenas",
-      productImage: "https://images.unsplash.com/photo-1599643478517-a313f52ccf64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
-      modelImage: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+      productImage: CC1,
+      modelImage: CC2,
       link: "/category/Collares y cadenas"
     },
     {
       name: "Pulseras y brazaletes",
-      productImage: "https://images.unsplash.com/photo-1588449668365-d15e397f6787?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      modelImage: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+      productImage: PB1,
+      modelImage: PB2,
       link: "/category/Pulseras y brazaletes"
     },
     {
       name: "Aretes y pendientes",
-      productImage: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      modelImage: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+      productImage: AP1,
+      modelImage: AP2,
       link: "/category/Aretes y pendientes"
     },
     {
       name: "Dijes y charms",
-      productImage: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      modelImage: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+      productImage: DC1,
+      modelImage: DC2,
       link: "/category/Dijes y charms"
     },
     {
       name: "Broches y alfileres",
-      productImage: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      modelImage: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+      productImage: BA1,
+      modelImage: BA2,
       link: "/category/Broches y alfileres"
     }
   ];
@@ -113,24 +127,24 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Sección de Categorías Detalladas */}
-        <section className="py-16 bg-white">
+        {/* Sección de Categorías Detalladas - Versión Mejorada para Móviles */}
+        <section className="py-10 bg-white">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">Explora por Categoría</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Explora por Categoría</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
                 Descubre nuestras colecciones exclusivas organizadas por categorías
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3 md:gap-4">
               {detailedCategories.map((category, index) => (
                 <Link 
                   key={index} 
                   to={category.link}
-                  className="group bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  className="group bg-white rounded-lg md:rounded-xl shadow-sm md:shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg         md:hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2"
                 >
-                  <div className="relative h-72 overflow-hidden">
+                  <div className="relative h-40 md:h-56 overflow-hidden">
                     {/* Imagen del producto (visible por defecto) */}
                     <img 
                       src={category.productImage} 
@@ -145,15 +159,15 @@ const Home = () => {
                       className="w-full h-full object-cover absolute top-0 left-0 opacity-0 transition-all duration-500 group-hover:opacity-100"
                     />
                     
-                    {/* Overlay con nombre de categoría */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                      <h3 className="text-white text-lg font-semibold text-center">{category.name}</h3>
+                    {/* Overlay con nombre de categoría (solo visible en hover en desktop) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity        duration-300 flex items-end justify-center p-3">
+                      <h3 className="text-white text-xs md:text-sm font-semibold text-center">{category.name}</h3>
                     </div>
                   </div>
                   
-                  {/* Nombre de categoría (siempre visible) */}
-                  <div className="p-4">
-                    <h3 className="text-gray-800 font-semibold text-center group-hover:text-emerald-600 transition-colors">
+                  {/* Nombre de categoría siempre visible en móviles, oculto en desktop (aparece en hover) */}
+                  <div className="p-2 md:hidden">
+                    <h3 className="text-gray-800 text-xs font-semibold text-center truncate">
                       {category.name}
                     </h3>
                   </div>
