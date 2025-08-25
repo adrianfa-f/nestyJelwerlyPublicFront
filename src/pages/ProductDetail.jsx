@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProductById } from '../services/productService';
+import { getProductById, getProducts } from '../services/productService';
 import { useCart } from '../context/useCart';
 import { useQuery } from '@tanstack/react-query';
 import { FaStar, FaShippingFast, FaUndo, FaShieldAlt } from 'react-icons/fa';
@@ -17,8 +17,52 @@ const ProductDetail = () => {
     queryFn: () => getProductById(id)
   });
 
+  // Obtener todos los productos para relaciones
+  const { data: allProducts = [] } = useQuery({
+    queryKey: ['all-products'],
+    queryFn: getProducts
+  });
+
   const handleAddToCart = () => {
     addToCart(product, quantity);
+  };
+
+  // Función para obtener productos relacionados
+  const getRelatedProducts = (currentProduct) => {
+    if (!currentProduct || allProducts.length === 0) return [];
+    
+    return allProducts
+      .filter(p => p.id !== currentProduct.id)
+      .sort((a, b) => {
+        // Priorizar misma categoría
+        const categoryMatchA = a.category === currentProduct.category ? 3 : 0;
+        const categoryMatchB = b.category === currentProduct.category ? 3 : 0;
+        
+        // Priorizar mismo material
+        const materialMatchA = a.material && currentProduct.material && 
+                              a.material.toLowerCase() === currentProduct.material.toLowerCase() ? 2 : 0;
+        const materialMatchB = b.material && currentProduct.material && 
+                              b.material.toLowerCase() === currentProduct.material.toLowerCase() ? 2 : 0;
+        
+        // Priorizar mismo género
+        const genderMatchA = a.gender && currentProduct.gender && 
+                            a.gender === currentProduct.gender ? 1 : 0;
+        const genderMatchB = b.gender && currentProduct.gender && 
+                            b.gender === currentProduct.gender ? 1 : 0;
+        
+        // Priorizar mismo color
+        const colorMatchA = a.color && currentProduct.color && 
+                           a.color.toLowerCase() === currentProduct.color.toLowerCase() ? 1 : 0;
+        const colorMatchB = b.color && currentProduct.color && 
+                           b.color.toLowerCase() === currentProduct.color.toLowerCase() ? 1 : 0;
+        
+        // Calcular puntuación total
+        const scoreA = categoryMatchA + materialMatchA + genderMatchA + colorMatchA;
+        const scoreB = categoryMatchB + materialMatchB + genderMatchB + colorMatchB;
+        
+        return scoreB - scoreA; // Ordenar por mayor puntuación primero
+      })
+      .slice(0, 4); // Limitar a 4 productos
   };
 
   if (isLoading) return (
@@ -44,6 +88,9 @@ const ProductDetail = () => {
 
   // Crear array de imágenes no nulas
   const images = [product.image1, product.image2, product.image3, product.image4].filter(img => img !== null && img !== '');
+
+  // Obtener productos relacionados
+  const relatedProducts = getRelatedProducts(product);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -117,6 +164,8 @@ const ProductDetail = () => {
             <ul className="text-sm text-gray-600 space-y-1">
               <li><span className="font-medium">Categoría:</span> {product.category}</li>
               {product.material && <li><span className="font-medium">Material:</span> {product.material}</li>}
+              {product.color && <li><span className="font-medium">Color:</span> {product.color}</li>}
+              {product.gender && <li><span className="font-medium">Género:</span> {product.gender}</li>}
               {product.dimensions && <li><span className="font-medium">Dimensiones:</span> {product.dimensions}</li>}
               {product.weight && <li><span className="font-medium">Peso:</span> {product.weight} g</li>}
             </ul>
@@ -167,19 +216,45 @@ const ProductDetail = () => {
         </div>
       </div>
       
-      {/* Productos relacionados (simulado) */}
+      {/* Productos relacionados */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-6">Productos relacionados</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {/* Aquí irían productos relacionados, por ahora placeholders */}
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="border rounded-lg p-3 animate-pulse">
-              <div className="bg-gray-200 h-40 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          ))}
-        </div>
+        {relatedProducts.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {relatedProducts.map(relatedProduct => (
+              <div key={relatedProduct.id} className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                <Link to={`/product/${relatedProduct.id}`}>
+                  {relatedProduct.image1 && (
+                    <img 
+                      src={relatedProduct.image1} 
+                      alt={relatedProduct.name} 
+                      className="w-full h-48 object-cover"
+                    />
+                  )}
+                </Link>
+                <div className="p-3">
+                  <Link 
+                    to={`/product/${relatedProduct.id}`} 
+                    className="font-semibold text-sm hover:text-emerald-600 block mb-1"
+                  >
+                    {relatedProduct.name}
+                  </Link>
+                  <p className="text-emerald-600 font-bold text-sm">${relatedProduct.price.toFixed(2)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="border rounded-lg p-3 animate-pulse">
+                <div className="bg-gray-200 h-40 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
