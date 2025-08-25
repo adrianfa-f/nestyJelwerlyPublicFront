@@ -18,6 +18,7 @@ import HechoAMano from './pages/benefits/HechoAMano';
 import EnvioGratis from './pages/benefits/EnvioGratis';
 import GarantiaCalidad from './pages/benefits/GarantiaCalidad';
 import Ubicaciones from './pages/Ubiaciones';
+import ScrollToTop from './componentes/ScrollToTop';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <ProductProvider>
           <Router>
             <div className="flex flex-col min-h-screen">
+              <ScrollToTop />
               <Navbar />
               <main className="flex-grow">
                 <Routes>
