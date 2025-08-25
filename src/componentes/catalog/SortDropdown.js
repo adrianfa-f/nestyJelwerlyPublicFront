@@ -3,19 +3,15 @@ import React from 'react';
 
 const SortDropdown = ({ sortBy, setSortBy }) => {
   return (
-    <div className="flex items-center">
-      <label htmlFor="sort" className="mr-2 text-sm text-gray-600">Ordenar por:</label>
-      <select
-        id="sort"
-        value={sortBy}
-        onChange={(e) => setSortBy(e.target.value)}
-        className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-      >
-        <option value="name">Nombre (A-Z)</option>
-        <option value="price-low">Precio (Menor a Mayor)</option>
-        <option value="price-high">Precio (Mayor a Menor)</option>
-      </select>
-    </div>
+    <select
+      value={sortBy}
+      onChange={(e) => setSortBy(e.target.value)}
+      className="bg-white border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+    >
+      <option value="name">Ordenar por: Nombre</option>
+      <option value="price-low">Precio: Menor a Mayor</option>
+      <option value="price-high">Precio: Mayor a Menor</option>
+    </select>
   );
 };
 

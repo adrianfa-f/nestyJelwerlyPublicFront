@@ -5,12 +5,14 @@ import Filters from '../componentes/catalog/Filters';
 import { useProduct } from '../context/ProductContext';
 import SortDropdown from '../componentes/catalog/SortDropdown';
 import SearchBar from '../componentes/catalog/SearchBar';
+import { FaFilter, FaTimes } from 'react-icons/fa';
 
 const Catalog = () => {
   const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const { products } = useProduct();
   
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -64,26 +66,71 @@ const Catalog = () => {
     setIsLoading(false);
   }, [products, filters, sortBy, searchTerm]);
 
+  const clearFilters = () => {
+    setFilters({});
+  };
+
+  const hasActiveFilters = Object.values(filters).some(value => value !== undefined && value !== '');
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Catálogo de Joyería</h1>
+      <h1 className="text-3xl font-bold mb-6">Catálogo de Joyería</h1>
+      
+      {/* Barra superior con búsqueda y botones */}
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex-grow">
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded"
+          >
+            {showFilters ? <FaTimes /> : <FaFilter />}
+            Filtros {hasActiveFilters && '•'}
+          </button>
+          <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+        </div>
+      </div>
+
+      {/* Panel de filtros móvil */}
+      {showFilters && (
+        <div className="md:hidden mb-6">
+          <Filters filters={filters} setFilters={setFilters} />
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="mt-2 text-sm text-emerald-600 hover:text-emerald-800"
+            >
+              Limpiar filtros
+            </button>
+          )}
+        </div>
+      )}
       
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="md:w-1/4">
+        {/* Filtros para desktop */}
+        <div className="hidden md:block md:w-1/4">
           <div className="sticky top-4">
-            <div className="mb-4">
-              <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            </div>
             <Filters filters={filters} setFilters={setFilters} />
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="mt-2 text-sm text-emerald-600 hover:text-emerald-800"
+              >
+                Limpiar filtros
+              </button>
+            )}
           </div>
         </div>
         
+        {/* Contenido principal */}
         <div className="md:w-3/4">
           <div className="flex justify-between items-center mb-6">
             <p className="text-gray-600">
               {filteredProducts.length} {filteredProducts.length === 1 ? 'producto' : 'productos'} encontrados
+              {hasActiveFilters && ' (filtrados)'}
             </p>
-            <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
           </div>
           
           {isLoading ? (
