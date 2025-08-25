@@ -62,7 +62,7 @@ const ProductDetail = () => {
         
         return scoreB - scoreA; // Ordenar por mayor puntuación primero
       })
-      .slice(0, 4); // Limitar a 4 productos
+      .slice(0, 8); // Limitar a 4 productos
   };
 
   if (isLoading) return (
