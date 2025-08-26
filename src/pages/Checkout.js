@@ -1,7 +1,7 @@
 // pages/Checkout.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/useCart';
+import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import StripeCheckout from '../components/checkout/StripeCheckout';
 

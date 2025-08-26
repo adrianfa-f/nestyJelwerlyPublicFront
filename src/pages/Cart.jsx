@@ -1,18 +1,31 @@
-// pages/Cart.js
 import { Link } from 'react-router-dom';
 import CartItem from '../componentes/cart/CartItem';
 import CartSummary from '../componentes/cart/CartSummary';
-import { useCart } from '../context/useCart';
+import { useCart } from '../context/CartContext';
 import { FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
 
 const Cart = () => {
-  const { cart, totalPrice, clearCart } = useCart();
+  const { cart, totalPrice, clearCart, loading } = useCart();
+  
+  // Si el carrito está cargando, mostrar un spinner
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-600"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Asegurarse de que cart.items existe y es un array
+  const cartItems = cart?.items || [];
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Tu Carrito de Compras</h1>
       
-      {cart.length === 0 ? (
+      {cartItems.length === 0 ? (
         <div className="text-center py-12">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-6">
             <FaShoppingBag className="text-2xl text-gray-400" />
@@ -31,7 +44,7 @@ const Cart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              {cart.map(item => (
+              {cartItems.map(item => (
                 <CartItem key={item.id} item={item} />
               ))}
             </div>
@@ -54,7 +67,10 @@ const Cart = () => {
           </div>
           
           <div>
-            <CartSummary total={totalPrice} itemCount={cart.reduce((sum, item) => sum + item.quantity, 0)} />
+            <CartSummary 
+              total={totalPrice} 
+              itemCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)} 
+            />
           </div>
         </div>
       )}

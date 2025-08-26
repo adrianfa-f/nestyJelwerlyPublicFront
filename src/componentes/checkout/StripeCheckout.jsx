@@ -7,7 +7,7 @@ import {
   useElements
 } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useCart } from '../../context/useCart';
+import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext'; // Asumiendo que tienes un contexto de autenticación
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);

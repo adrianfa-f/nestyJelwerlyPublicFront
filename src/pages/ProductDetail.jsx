@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getProductById, getProducts } from '../services/productService';
-import { useCart } from '../context/useCart';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
-import { FaStar, FaShippingFast, FaUndo, FaShieldAlt } from 'react-icons/fa';
+import { FaStar, FaShippingFast, FaUndo, FaShieldAlt, FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [hoverImage, setHoverImage] = useState(null);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
   
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', id],
@@ -24,7 +32,39 @@ const ProductDetail = () => {
   });
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    if (!user) {
+      navigate('/login', { state: { from: 'add-to-cart' } });
+      return;
+    }
+
+    setCartLoading(true);
+    try {
+      addToCart(product, quantity);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      navigate('/login', { state: { from: 'wishlist' } });
+      return;
+    }
+
+    setWishlistLoading(true);
+    try {
+      if (isInWishlist(product.id)) {
+        await removeFromWishlist(product.id);
+      } else {
+        await addToWishlist(product.id);
+      }
+    } catch (error) {
+      console.error('Error updating wishlist:', error);
+    } finally {
+      setWishlistLoading(false);
+    }
   };
 
   // Función para obtener productos relacionados
@@ -88,6 +128,7 @@ const ProductDetail = () => {
 
   // Crear array de imágenes no nulas
   const images = [product.image1, product.image2, product.image3, product.image4].filter(img => img !== null && img !== '');
+  const isWishlisted = isInWishlist(product.id);
 
   // Obtener productos relacionados
   const relatedProducts = getRelatedProducts(product);
@@ -110,7 +151,7 @@ const ProductDetail = () => {
       </nav>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div>
+        <div className="relative">
           <div className="mb-4 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center h-96">
             {images.length > 0 && (
               <img 
@@ -142,6 +183,20 @@ const ProductDetail = () => {
               ))}
             </div>
           )}
+          
+          {/* Botón de wishlist */}
+          <button
+            onClick={handleWishlistToggle}
+            disabled={wishlistLoading}
+            className="absolute top-4 right-4 p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors disabled:opacity-50"
+            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          >
+            {isWishlisted ? (
+              <FaHeart className="text-red-500 text-xl" />
+            ) : (
+              <FaRegHeart className="text-gray-600 text-xl" />
+            )}
+          </button>
         </div>
         
         <div>
@@ -192,9 +247,10 @@ const ProductDetail = () => {
           
           <button 
             onClick={handleAddToCart}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-md font-medium transition-colors mb-4"
+            disabled={cartLoading}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-md font-medium transition-colors mb-4 disabled:opacity-50"
           >
-            Añadir al Carrito
+            {cartLoading ? 'Agregando...' : 'Añadir al Carrito'}
           </button>
           
           <div className="border-t pt-4">

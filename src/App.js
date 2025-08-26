@@ -19,43 +19,54 @@ import EnvioGratis from './pages/benefits/EnvioGratis';
 import GarantiaCalidad from './pages/benefits/GarantiaCalidad';
 import Ubicaciones from './pages/Ubiaciones';
 import ScrollToTop from './componentes/ScrollToTop';
+import { WishlistProvider } from './context/WishlistContext';
+import Wishlist from './pages/Wishlist';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <ProductProvider>
-          <Router>
-            <div className="flex flex-col min-h-screen">
-              <ScrollToTop />
-              <Navbar />
-              <main className="flex-grow">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/catalog" element={<Catalog />} />
-                  <Route path="/product/:id" element={<ProductDetail />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/category/:categoryName" element={<CategoryProducts />} />
-                  <Route path="/beneficios/materiales-premium" element={<MaterialesPremium />} />
-                  <Route path="/beneficios/hecho-a-mano" element={<HechoAMano />} />
-                  <Route path="/beneficios/envio-gratis" element={<EnvioGratis />} />
-                  <Route path="/beneficios/garantia-calidad" element={<GarantiaCalidad />} />
-                  <Route path="/ubicaciones" element={<Ubicaciones />} />
-                  <Route 
-                    path="/profile" 
-                    element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    } 
-                  />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </Router>
+          <CartProvider>
+            <WishlistProvider>
+              <Router>
+                <div className="flex flex-col min-h-screen">
+                  <ScrollToTop />
+                  <Navbar />
+                  <main className="flex-grow">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/catalog" element={<Catalog />} />
+                      <Route path="/product/:id" element={<ProductDetail />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/category/:categoryName" element={<CategoryProducts />} />
+                      <Route path="/beneficios/materiales-premium" element={<MaterialesPremium />} />
+                      <Route path="/beneficios/hecho-a-mano" element={<HechoAMano />} />
+                      <Route path="/beneficios/envio-gratis" element={<EnvioGratis />} />
+                      <Route path="/beneficios/garantia-calidad" element={<GarantiaCalidad />} />
+                      <Route path="/ubicaciones" element={<Ubicaciones />} />
+                      <Route path="/wishlist" element={
+                        <ProtectedRoute>
+                          <Wishlist />
+                        </ProtectedRoute>
+                      } />
+                      <Route 
+                        path="/profile" 
+                        element={
+                          <ProtectedRoute>
+                            <Profile />
+                          </ProtectedRoute>
+                        } 
+                      />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
+              </Router>
+            </WishlistProvider>
+          </CartProvider>
         </ProductProvider>
       </CartProvider>
     </AuthProvider>
