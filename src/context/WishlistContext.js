@@ -1,79 +1,58 @@
-// context/WishlistContext.js
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from './AuthContext';
-import * as wishlistService from '../services/wishlistService';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const WishlistContext = createContext();
 
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
   if (!context) {
-    throw new Error('useWishlist must be used within a WishlistProvider');
+    throw new Error("useWishlist must be used within a WishlistProvider");
   }
   return context;
 };
 
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
 
+  // Cargar wishlist desde localStorage al inicializar
   useEffect(() => {
-    if (user) {
-      loadWishlist();
-    } else {
-      setWishlist([]);
-      setLoading(false);
+    const savedWishlist = localStorage.getItem("wishlist");
+    if (savedWishlist) {
+      setWishlist(JSON.parse(savedWishlist));
     }
-  }, [user]);
+  }, []);
 
-  const loadWishlist = async () => {
-    try {
-      setLoading(true);
-      const data = await wishlistService.getWishlist();
-      setWishlist(data);
-    } catch (error) {
-      console.error('Error loading wishlist:', error);
-    } finally {
-      setLoading(false);
-    }
+  // Guardar wishlist en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  const addToWishlist = (productId) => {
+    setWishlist((prevWishlist) => {
+      if (prevWishlist.includes(productId)) {
+        return prevWishlist;
+      }
+      return [...prevWishlist, productId];
+    });
   };
 
-  const addToWishlist = async (productId) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    try {
-      const updatedWishlist = await wishlistService.addToWishlist(productId);
-      setWishlist(updatedWishlist);
-    } catch (error) {
-      console.error('Error adding to wishlist:', error);
-      throw error;
-    }
-  };
-
-  const removeFromWishlist = async (productId) => {
-    if (!user) throw new Error('User not authenticated');
-    
-    try {
-      const updatedWishlist = await wishlistService.removeFromWishlist(productId);
-      setWishlist(updatedWishlist);
-    } catch (error) {
-      console.error('Error removing from wishlist:', error);
-      throw error;
-    }
+  const removeFromWishlist = (productId) => {
+    setWishlist((prevWishlist) =>
+      prevWishlist.filter((id) => id !== productId)
+    );
   };
 
   const isInWishlist = (productId) => {
-    return wishlist.some(item => item.productId === productId);
+    return wishlist.includes(productId);
   };
 
   const value = {
     wishlist,
     loading,
+    setLoading,
     addToWishlist,
     removeFromWishlist,
     isInWishlist,
-    refreshWishlist: loadWishlist
   };
 
   return (
