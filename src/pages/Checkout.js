@@ -72,7 +72,9 @@ const Checkout = () => {
         status: "pending",
       };
 
-      const response = await fetch("/api/orders", {
+      // Usar la variable de entorno para la URL del backend
+      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+      const response = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,6 +95,7 @@ const Checkout = () => {
     } catch (error) {
       console.error("Error processing order:", error);
       setIsSubmitting(false);
+      // Podrías mostrar un mensaje de error al usuario aquí
     }
   };
 
