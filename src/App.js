@@ -17,6 +17,7 @@ import ScrollToTop from "./componentes/ScrollToTop";
 import { WishlistProvider } from "./context/WishlistContext";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
+import OrderTracking from "./page/OrderTracking";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
                   <Route path="/ubicaciones" element={<Ubicaciones />} />
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-tracking" element={<OrderTracking />} />
                 </Routes>
               </main>
               <Footer />

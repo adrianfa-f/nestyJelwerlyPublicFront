@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  FaShoppingCart,
-  FaHeart,
-  FaThList,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaShoppingCart, FaHeart, FaThList, FaSearch } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import Logo from "../../assets/NestyLuxeLogoAjustado.png";
@@ -35,13 +30,13 @@ const Navbar = () => {
               <FaThList className="text-xl" />
             </Link>
 
-            {/* Ubicaciones como icono */}
+            {/* Seguimiento de pedidos */}
             <Link
-              to="/ubicaciones"
+              to="/order-tracking"
               className="hover:text-emerald-600"
-              title="Ubicaciones"
+              title="Seguimiento de Pedidos"
             >
-              <FaMapMarkerAlt className="text-xl" />
+              <FaSearch className="text-xl" />
             </Link>
 
             {/* Wishlist como icono */}

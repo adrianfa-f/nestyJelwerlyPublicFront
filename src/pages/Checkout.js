@@ -91,6 +91,7 @@ const Checkout = () => {
         clearCart();
         setOrderCompleted(true);
         setIsSubmitting(false);
+        navigate(`/order-tracking?order=${newOrderNumber}`);
       }, 2000);
     } catch (error) {
       console.error("Error processing order:", error);
