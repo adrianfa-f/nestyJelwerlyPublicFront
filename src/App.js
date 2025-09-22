@@ -17,7 +17,7 @@ import ScrollToTop from "./componentes/ScrollToTop";
 import { WishlistProvider } from "./context/WishlistContext";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
-import OrderTracking from "./page/OrderTracking";
+import OrderTracking from "./pages/OrderTracking";
 
 function App() {
   return (
