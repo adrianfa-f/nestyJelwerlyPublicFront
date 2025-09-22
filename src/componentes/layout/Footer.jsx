@@ -131,8 +131,6 @@ const Footer = () => {
           <div>
             <h4 className="font-bold mb-4">Contacto</h4>
             <address className="not-italic text-gray-300">
-              <p className="mb-2">Calle Artesanal 123</p>
-              <p className="mb-2">Ciudad, CP 28000</p>
               <p className="mb-2">Email: info@nestyluxe.com</p>
               <p>Teléfono: +34 123 456 789</p>
             </address>
