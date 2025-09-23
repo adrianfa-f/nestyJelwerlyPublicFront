@@ -53,11 +53,9 @@ const Checkout = () => {
     setIsSubmitting(true);
 
     try {
-      // Generar número de pedido
       const newOrderNumber = generateOrderNumber();
       setOrderNumber(newOrderNumber);
 
-      // Enviar la orden al backend
       const orderData = {
         orderNumber: newOrderNumber,
         customerName: formData.name,
@@ -72,7 +70,6 @@ const Checkout = () => {
         status: "pending",
       };
 
-      // Usar la variable de entorno para la URL del backend
       const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
       const response = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
@@ -86,20 +83,35 @@ const Checkout = () => {
         throw new Error("Error al crear la orden");
       }
 
-      // Limpiar carrito después de 2 segundos
+      // Guardar en localStorage
+      const orderInfo = {
+        orderNumber: newOrderNumber,
+        email: formData.email,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Obtener órdenes existentes y agregar la nueva
+      const existingOrders = JSON.parse(
+        localStorage.getItem("nestypasto_orders") || "[]"
+      );
+      const updatedOrders = [...existingOrders, orderInfo];
+      localStorage.setItem("nestypasto_orders", JSON.stringify(updatedOrders));
+
+      // Guardar también el email para futuras consultas
+      localStorage.setItem("nestypasto_user_email", formData.email);
+
       setTimeout(() => {
         clearCart();
         setOrderCompleted(true);
         setIsSubmitting(false);
-        navigate(`/order-tracking?order=${newOrderNumber}`);
       }, 2000);
     } catch (error) {
       console.error("Error processing order:", error);
       setIsSubmitting(false);
-      // Podrías mostrar un mensaje de error al usuario aquí
     }
   };
 
+  // En Checkout.js - Modificar la parte de orderCompleted
   if (orderCompleted) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -136,12 +148,34 @@ const Checkout = () => {
             </p>
           </div>
 
-          <div className="text-center">
+          {/* NUEVA SECCIÓN AÑADIDA */}
+          <div className="border-t pt-6 mb-6">
+            <div className="text-center">
+              <p className="mb-3 text-gray-600">
+                Puedes gestionar y seguir el estado de tu pedido en:
+              </p>
+              <button
+                onClick={() => navigate("/my-orders")}
+                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 mr-3"
+              >
+                Mis Pedidos
+              </button>
+              <button
+                onClick={() => navigate("/catalog")}
+                className="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700"
+              >
+                Seguir comprando
+              </button>
+            </div>
+          </div>
+
+          <div className="text-center text-sm text-gray-500">
+            <p>¿Accedes desde otro dispositivo? También puedes:</p>
             <button
-              onClick={() => navigate("/catalog")}
-              className="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700"
+              onClick={() => navigate("/order-tracking")}
+              className="text-blue-500 hover:text-blue-700 underline mt-2"
             >
-              Seguir comprando
+              Buscar mi pedido con número y email
             </button>
           </div>
         </div>

@@ -1,5 +1,12 @@
+// Navbar.js - Actualizado
 import { Link } from "react-router-dom";
-import { FaShoppingCart, FaHeart, FaThList, FaSearch } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaHeart,
+  FaThList,
+  FaSearch,
+  FaBoxOpen,
+} from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import Logo from "../../assets/NestyLuxeLogoAjustado.png";
@@ -21,7 +28,7 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center space-x-6">
-            {/* Catálogo como icono */}
+            {/* Catálogo */}
             <Link
               to="/catalog"
               className="hover:text-emerald-600"
@@ -30,16 +37,25 @@ const Navbar = () => {
               <FaThList className="text-xl" />
             </Link>
 
-            {/* Seguimiento de pedidos */}
+            {/* Mis Pedidos (NUEVO) */}
+            <Link
+              to="/my-orders"
+              className="hover:text-emerald-600"
+              title="Mis Pedidos"
+            >
+              <FaBoxOpen className="text-xl" />
+            </Link>
+
+            {/* Seguimiento de pedidos (para búsqueda manual) */}
             <Link
               to="/order-tracking"
               className="hover:text-emerald-600"
-              title="Seguimiento de Pedidos"
+              title="Buscar Pedido"
             >
               <FaSearch className="text-xl" />
             </Link>
 
-            {/* Wishlist como icono */}
+            {/* Wishlist */}
             <Link
               to="/wishlist"
               className="relative hover:text-emerald-600"
@@ -53,7 +69,7 @@ const Navbar = () => {
               )}
             </Link>
 
-            {/* Carrito como icono */}
+            {/* Carrito */}
             <Link
               to="/cart"
               className="relative hover:text-emerald-600"

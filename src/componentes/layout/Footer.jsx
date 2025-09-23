@@ -81,10 +81,18 @@ const Footer = () => {
               </li>
               <li>
                 <Link
+                  to="/my-orders"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Mis Pedidos
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/order-tracking"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  Seguimiento de Pedidos
+                  Buscar Pedido
                 </Link>
               </li>
             </ul>

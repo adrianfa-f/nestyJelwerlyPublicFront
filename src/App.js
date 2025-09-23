@@ -18,6 +18,7 @@ import { WishlistProvider } from "./context/WishlistContext";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
 import OrderTracking from "./pages/OrderTracking";
+import OrderTracker from "./componentes/OrderTracker";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-tracking" element={<OrderTracking />} />
+                  <Route path="/my-orders" element={<OrderTracker />} />
                 </Routes>
               </main>
               <Footer />
